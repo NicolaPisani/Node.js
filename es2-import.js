@@ -1,4 +1,4 @@
-const sayHello = require("./es2"); // Nota: './greetings' indica il percorso del modulo locale
+const sayHello = require("./es2"); 
 
 const saluti = sayHello("Nico");
 console.log(saluti);
