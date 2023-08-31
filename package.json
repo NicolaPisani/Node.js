@@ -1,7 +1,7 @@
 {
   "name": "es",
   "version": "1.0.0",
-  "type" : "module",
+  "type": "commonjs",
   "description": "First commit",
   "main": "es1.js",
   "scripts": {
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/NicolaPisani/Node.js/issues"
   },
-  "homepage": "https://github.com/NicolaPisani/Node.js#readme"
+  "homepage": "https://github.com/NicolaPisani/Node.js#readme",
+  "dependencies": {
+    "figlet": "^1.6.0"
+  }
 }
