@@ -32,4 +32,4 @@ async function getResults() {
   }
 }
 
-getResults();
+getResults()
