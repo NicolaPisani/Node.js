@@ -2,9 +2,10 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const expressAsyncErrors = require("express-async-errors");
-const planetRouter = require("./planetRouter"); // Importa il tuo router dei pianeti
+const planetRouter = require("./planetRouter");
+const pgp = require("pg-promise")();
 
-dotenv.config(); // Carica le variabili d'ambiente da un file .env
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -15,24 +16,23 @@ app.use(morgan("dev"));
 // Middleware per accettare JSON dal client
 app.use(express.json());
 
-//  "database" dei pianeti
-let planets = [
-  {
-    id: 1,
-    name: "Earth",
-  },
-  {
-    id: 2,
-    name: "Mars",
-  },
-];
+// Configura la connessione al database PostgreSQL
+const db = pgp({
+  connectionString: process.env.DB_CONNECTION_STRING, // Aggiungi la tua stringa di connessione PostgreSQL qui
+});
 
-// Monta il router dei pianeti su un percorso specifico (ad esempio, /api/planets)
-app.use("/api/planets", planetRouter);
+// Usa il router dei pianeti
+app.use("/api/planets", planetRouter(db));
 
 // Endpoint per ottenere la lista dei pianeti
-app.get("/planets", (req, res) => {
-  res.json(planets);
+app.get("/planets", async (req, res) => {
+  try {
+    const planets = await db.any("SELECT * FROM planets");
+    res.json(planets);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // Avvio del server
